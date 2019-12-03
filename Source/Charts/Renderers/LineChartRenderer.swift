@@ -580,18 +580,22 @@ open class LineChartRenderer: LineRadarRenderer
                     {
                         continue
                     }
-                    
+
                     if dataSet.isDrawValuesEnabled
                     {
-                        context.drawText(formatter.stringForValue(e.y,
-                                                                  entry: e,
-                                                                  dataSetIndex: i,
-                                                                  viewPortHandler: viewPortHandler),
-                                         at: CGPoint(x: pt.x,
-                                                     y: pt.y - CGFloat(valOffset) - valueFont.lineHeight),
-                                         angleRadians: angleRadians,
-                                         attributes: [.font: valueFont,
-                                                      .foregroundColor: dataSet.valueTextColorAt(j)])
+                      let string = formatter.stringForValue(e.y,
+                                  entry: e,
+                                  dataSetIndex: i,
+                                  viewPortHandler: viewPortHandler)
+                      let linebreakYPadding: CGFloat = string.contains("\n") ? valueFont.lineHeight + 5.0 : 0.0
+                      
+                      let y = pt.y - CGFloat(valOffset) - valueFont.lineHeight + linebreakYPadding
+                      context.drawText(string,
+                                       at: CGPoint(x: pt.x,
+                                                   y: y),
+                                       angleRadians: angleRadians,
+                                       attributes: [.font: valueFont,
+                                                    .foregroundColor: dataSet.valueTextColorAt(j)])
                     }
                     
                     if let icon = e.icon, dataSet.isDrawIconsEnabled
